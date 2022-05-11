@@ -10,6 +10,7 @@ int main()
     
     for (int i = imageHeight-1; i >= 0; --i)
     {
+        std::cerr << "\rScanlines remaining: " << i << ' ' << std::flush;
         for (int j = 0; j < imageWidth; ++j)
         {
             // Scales the rgb values across the image
@@ -26,6 +27,8 @@ int main()
             std::cout << ir << ' ' << ig << ' ' << ib << "\n";
         }
     }
+
+    std::cerr << "\nDone.\n";
     
     return 0;
 }
