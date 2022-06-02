@@ -17,16 +17,18 @@ CPPFLAGS ?= $(INC_FLAGS) -std=c++11 -MMD -MP
 
 # image target
 $(BUILD_DIR)/$(TARGET_IMAGE): $(BUILD_DIR)/$(TARGET_EXEC)
-	$(BUILD_DIR)/$(TARGET_EXEC) > $(BUILD_DIR)/$(TARGET_IMAGE)
+	@echo "Executing..\n"
+	@$(BUILD_DIR)/$(TARGET_EXEC) > $(BUILD_DIR)/$(TARGET_IMAGE)
 
 # executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+	@echo "Building.."
+	@$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
 # c++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
-	$(MKDIR_P) $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	@$(MKDIR_P) $(dir $@)
+	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: clean
 

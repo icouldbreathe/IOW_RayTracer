@@ -5,8 +5,8 @@
 
 int main()
 {
-    const int imageWidth = 512;
-    const int imageHeight = 512;
+    const int imageWidth = 1920;
+    const int imageHeight = 1080;
     const int maxColor = 255;
 
     std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n" << maxColor << "\n";
