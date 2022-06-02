@@ -3,6 +3,7 @@ TARGET_EXEC ?= a.out
 TARGET_IMAGE ?= image.ppm
 
 BUILD_DIR ?= ./build
+BIN_DIR ?= ./bin
 SRC_DIRS ?= ./src
 
 SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
@@ -16,9 +17,10 @@ CXX := g++
 CPPFLAGS ?= $(INC_FLAGS) -std=c++11 -MMD -MP
 
 # image target
-$(BUILD_DIR)/$(TARGET_IMAGE): $(BUILD_DIR)/$(TARGET_EXEC)
+$(BIN_DIR)/$(TARGET_IMAGE): $(BUILD_DIR)/$(TARGET_EXEC)
 	@echo "Executing..\n"
-	@$(BUILD_DIR)/$(TARGET_EXEC) > $(BUILD_DIR)/$(TARGET_IMAGE)
+	@$(MKDIR_P) $(dir $@)
+	@$(BUILD_DIR)/$(TARGET_EXEC) > $(BIN_DIR)/$(TARGET_IMAGE)
 
 # executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
