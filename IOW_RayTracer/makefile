@@ -1,3 +1,4 @@
+# Makefile
 TARGET_EXEC ?= a.out
 TARGET_IMAGE ?= image.ppm
 
@@ -14,9 +15,11 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 CXX := g++
 CPPFLAGS ?= $(INC_FLAGS) -std=c++11 -MMD -MP
 
+# image target
 $(BUILD_DIR)/$(TARGET_IMAGE): $(BUILD_DIR)/$(TARGET_EXEC)
 	$(BUILD_DIR)/$(TARGET_EXEC) > $(BUILD_DIR)/$(TARGET_IMAGE)
 
+# executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
