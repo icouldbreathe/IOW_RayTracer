@@ -19,9 +19,9 @@ class ray
             return orig + t*dir;
         }
         
-        public:
-            point3 orig;
-            vec3 dir;
+    public:
+        point3 orig;
+        vec3 dir;
 };
 
 #endif
