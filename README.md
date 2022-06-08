@@ -20,6 +20,7 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [ ] Final Render
 
 ## Usage
+### Make
 
 Use `make` to build debug or release builds. `make` or `make render` will also output the rendered image.
 
