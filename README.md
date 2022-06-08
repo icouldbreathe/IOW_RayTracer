@@ -20,7 +20,14 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [ ] Defocus Blur
 - [ ] Final Render
 
+## Prerequisites
+
+- [make](https://www.gnu.org/software/make/)
+- [clang++](https://releases.llvm.org/)
+- [PPM viewer](https://fileinfo.com/extension/ppm#portable_pixmap_image_file_open)
+
 ## Usage
+
 ### Make
 
 Use `make <debug|release>` to build debug or release builds. `make` or `make render` will also output the rendered image.
@@ -29,7 +36,3 @@ Use `make <debug|release>` to build debug or release builds. `make` or `make ren
 $ cd IOW_RayTracer
 $ make <debug|release|render|remake|clean>
 ```
-
-### View PPM files
-
-Possible options [here](https://fileinfo.com/extension/ppm#portable_pixmap_image_file_open?target=_blank).
