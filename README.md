@@ -22,9 +22,9 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 ## Usage
 ### Make
 
-Use `make` to build debug or release builds. `make` or `make render` will also output the rendered image.
+Use `make <debug|release>` to build debug or release builds. `make` or `make render` will also output the rendered image.
 
 ```shell
 $ cd IOW_RayTracer
-$ make <debug|release|render>
+$ make <debug|release|render|remake>
 ```
