@@ -72,9 +72,9 @@ $(REL_IMG_OUTPUT): $(REL_EXE)
 
 # Other rules
 prep:
-	$(MKDIR_P) $(DB_DIR) $(DB_BUILD_DIR) $(DB_BIN_DIR) $(REL_DIR) $(REL_BUILD_DIR) $(REL_BIN_DIR)
+	$(MKDIR_P) $(DB_BUILD_DIR) $(DB_BIN_DIR) $(REL_BUILD_DIR) $(REL_BIN_DIR)
 
-.PHONY: all clean debug prep release remake
+.PHONY: all clean debug prep release remake render
 
 remake: clean all
 
