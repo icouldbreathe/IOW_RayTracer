@@ -32,4 +32,4 @@ $ make <debug|release|render|remake|clean>
 
 ### View PPM files
 
-Possible options [here](https://fileinfo.com/extension/ppm#portable_pixmap_image_file_open).
+Possible options [here](https://fileinfo.com/extension/ppm#portable_pixmap_image_file_open?target=_blank).
