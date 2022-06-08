@@ -26,5 +26,5 @@ Use `make <debug|release>` to build debug or release builds. `make` or `make ren
 
 ```shell
 $ cd IOW_RayTracer
-$ make <debug|release|render|remake>
+$ make <debug|release|render|remake|clean>
 ```
