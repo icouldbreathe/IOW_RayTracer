@@ -4,8 +4,22 @@
 
 #include <iostream>
 
+bool hitSphere(const point3& center, double radius, const ray& r)
+{
+    vec3 oc = r.origin() - center;
+    auto a = dot(r.direction(), r.direction());
+    auto b = 2.0 * dot(r.direction(), oc);
+    auto c = dot(oc, oc) - radius * radius;
+    auto discriminant = b * b - 4.0 * a * c;
+    return (discriminant > 0);
+}
+
 color rayColor(const ray& r)
 {
+    if (hitSphere(point3(0, 0, 1), 0.5, r))
+    {
+        return color(1, 0, 0);
+    }
     vec3 unitDirection = unitVector(r.direction());
     auto t = 0.5 * (unitDirection.y() + 1.0);
     return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
