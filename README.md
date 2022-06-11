@@ -10,7 +10,7 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [x] Implement basic ray class
 - [x] Implement basic camera, viewport and background
 - [x] Implement a build solution (make)
-- [ ] Ray-Sphere intersection
+- [x] Ray-Sphere intersection
 - [ ] Surface normals and multiple objects
 - [ ] Antialiasing
 - [ ] Diffuse materials
