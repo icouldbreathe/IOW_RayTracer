@@ -1,0 +1,10 @@
+﻿---
+Language: Cpp
+BasedOnStyle: Microsoft
+
+IndentWidth: 4
+MaxEmptyLinesToKeep: 1
+UseTab: Never
+
+
+...
