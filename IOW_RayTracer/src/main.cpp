@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "Color.h"
-#include "Common.h"
 #include "HittableList.h"
 #include "Sphere.h"
+#include "common.h"
 
 Color rayColor(const Ray &r, const Hittable &world)
 {
