@@ -1,9 +1,13 @@
-#ifndef COMMON_H
-#define COMMON_H
+#pragma once
 
 #include <cmath>
 #include <limits>
 #include <memory>
+
+// Common Headers
+
+#include "Ray.h"
+#include "Vec3.h"
 
 // Usings
 
@@ -22,10 +26,3 @@ inline double degreesToRadians(double degrees)
 {
     return degrees * pi / 180.0;
 }
-
-// Common Headers
-
-#include "ray.h"
-#include "vec3.h"
-
-#endif

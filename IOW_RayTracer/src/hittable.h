@@ -1,26 +1,23 @@
-#ifndef HITTABLE_H
-#define HITTABLE_H
+#pragma once
 
-#include "ray.h"
+#include "Ray.h"
 
-struct hitRecord
+struct HitRecord
 {
-    point3 p;
-    vec3 normal;
+    Point3 p;
+    Vec3 normal;
     double t;
-    bool frontFace;
+    bool bFrontFace;
 
-    inline void setFaceNormal(const ray& r, const vec3& outwardNormal)
+    inline void setFaceNormal(const Ray &r, const Vec3 &outwardNormal)
     {
-        frontFace = dot(r.direction(), outwardNormal) < 0;
-        normal = frontFace ? outwardNormal : -outwardNormal;
+        bFrontFace = dot(r.direction(), outwardNormal) < 0;
+        normal = bFrontFace ? outwardNormal : -outwardNormal;
     }
 };
 
-class hittable
+class Hittable
 {
-    public:
-        virtual bool hit(const ray &r, double tMin, double tMax, hitRecord &rec) const = 0;
+  public:
+    virtual bool hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const = 0;
 };
-
-#endif
