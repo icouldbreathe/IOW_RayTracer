@@ -30,7 +30,8 @@ REL_CPP_FLAGS := -O3 -DNDEBUG
 
 # Compiler flags
 CXX := clang++
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++11 -Wall -Werror -Wextra 
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++11
+CPPWARN := -Wall -Werror -Wextra 
 
 # Default build
 all: render
@@ -40,7 +41,7 @@ debug: $(DB_EXE)
 
 $(DB_EXE): $(DB_OBJS)
 	@$(MKDIR_P) $(dir $@)
-	@$(CXX) $(CPPFLAGS) $(DB_CPP_FLAGS) $(DB_OBJS) -o $@ $(LDFLAGS)
+	@$(CXX) $(CPPFLAGS) $(CPPWARN) $(DB_CPP_FLAGS) $(DB_OBJS) -o $@ $(LDFLAGS)
 	@echo "Debug: Finished"
 
 $(DB_BUILD_DIR)/%.cpp.o: %.cpp
