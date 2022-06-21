@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Camera.h"
 #include "Color.h"
 #include "HittableList.h"
 #include "Sphere.h"
@@ -24,7 +25,7 @@ int main()
     const auto aspectRatio = 16.0 / 9.0;
     const int imageWidth = 800;
     const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-
+    const int samplesPerPixel = 100;
     const int maxColor = 255;
 
     // World
@@ -33,31 +34,30 @@ int main()
     world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
 
     // Camera
-    auto viewportHeight = 2.0;
-    auto viewportWidth = aspectRatio * viewportHeight;
-    auto focalLength = 1.0;
 
-    auto origin = Point3(0, 0, 0);
-    auto horizontal = Vec3(viewportWidth, 0, 0);
-    auto vertical = Vec3(0, viewportHeight, 0);
-    auto lowerLeftCorner = origin - horizontal / 2 - vertical / 2 - Vec3(0, 0, focalLength);
+    Camera camera;
 
     // Render
 
-    std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n" << maxColor << "\n";
+    std::cout << "P3\n"
+              << imageWidth << ' ' << imageHeight << "\n"
+              << maxColor << "\n";
 
     for (int i = imageHeight - 1; i >= 0; --i)
     {
         std::cerr << "\rScanlines remaining: " << i << ' ' << std::flush;
         for (int j = 0; j < imageWidth; ++j)
         {
-            auto u = double(j) / (imageWidth - 1);
-            auto v = double(i) / (imageHeight - 1);
+            Color pixelColor(0, 0, 0);
+            for (int s = 0; s < samplesPerPixel; ++s)
+            {
+                auto u = (j + randomDouble()) / (imageWidth - 1);
+                auto v = (i + randomDouble()) / (imageHeight - 1);
 
-            Ray r(origin, lowerLeftCorner + u * horizontal + v * vertical - origin);
-            Color pixelColor = rayColor(r, world);
-
-            writeColor(std::cout, pixelColor);
+                Ray r = camera.getRay(u, v);
+                pixelColor += rayColor(r, world);
+            }
+            writeColor(std::cout, pixelColor, samplesPerPixel);
         }
     }
 
