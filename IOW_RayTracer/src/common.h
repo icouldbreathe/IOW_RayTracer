@@ -1,14 +1,9 @@
 #pragma once
 
 #include <cmath>
+#include <cstdlib>
 #include <limits>
 #include <memory>
-#include <random>
-
-// Common Headers
-
-#include "Ray.h"
-#include "Vec3.h"
 
 // Usings
 
@@ -30,9 +25,12 @@ inline double degreesToRadians(double degrees)
 
 inline double randomDouble()
 {
-    static std::uniform_int_distribution<double> distribution(0.0, 1.0);
-    static std::mt19937 generator;
-    return distribution(generator);
+    return rand() / (RAND_MAX + 1.0);
+}
+
+inline double randomDouble(double min, double max)
+{
+    return min + (max - min) * randomDouble();
 }
 
 inline double clamp(double x, double min, double max)
@@ -43,3 +41,8 @@ inline double clamp(double x, double min, double max)
         return max;
     return x;
 }
+
+// Common Headers
+
+#include "Ray.h"
+#include "Vec3.h"
