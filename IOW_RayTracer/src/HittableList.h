@@ -21,32 +21,34 @@ class HittableList : public Hittable
 
     void clear()
     {
-        objects.clear();
+        m_objects.clear();
     }
     void add(shared_ptr<Hittable> object)
     {
-        objects.push_back(object);
+        m_objects.push_back(object);
     }
 
-    virtual bool hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const override;
+    virtual bool hit(const Ray &ray, double tMin, double tMax,
+                     HitRecord &record) const override;
 
   public:
-    std::vector<shared_ptr<Hittable>> objects;
+    std::vector<shared_ptr<Hittable>> m_objects;
 };
 
-bool HittableList::hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const
+bool HittableList::hit(const Ray &ray, double tMin, double tMax,
+                       HitRecord &record) const
 {
     HitRecord tempRec;
     bool bHitAnything = false;
     auto closestSoFar = tMax;
 
-    for (const auto &object : objects)
+    for (const auto &object : m_objects)
     {
-        if (object->hit(r, tMin, closestSoFar, tempRec))
+        if (object->hit(ray, tMin, closestSoFar, tempRec))
         {
             bHitAnything = true;
             closestSoFar = tempRec.t;
-            rec = tempRec;
+            record = tempRec;
         }
     }
 

@@ -9,23 +9,27 @@ class Sphere : public Hittable
     Sphere()
     {
     }
-    Sphere(Point3 cen, double r) : center(cen), radius(r)
+    Sphere(Point3 center, double radius, shared_ptr<Material> pMaterial)
+        : m_center(center), m_radius(radius), m_pMaterial(pMaterial)
     {
     }
 
-    virtual bool hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const override;
+    virtual bool hit(const Ray &ray, double tMin, double tMax,
+                     HitRecord &record) const override;
 
   public:
-    Point3 center;
-    double radius;
+    Point3 m_center;
+    double m_radius;
+    shared_ptr<Material> m_pMaterial;
 };
 
-bool Sphere::hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const
+bool Sphere::hit(const Ray &ray, double tMin, double tMax,
+                 HitRecord &record) const
 {
-    Vec3 oc = r.origin() - center;
-    auto a = r.direction().lengthSquared();
-    auto half_b = dot(oc, r.direction());
-    auto c = oc.lengthSquared() - radius * radius;
+    Vec3 oc = ray.origin() - m_center;
+    auto a = ray.direction().lengthSquared();
+    auto half_b = dot(oc, ray.direction());
+    auto c = oc.lengthSquared() - m_radius * m_radius;
 
     auto discriminant = half_b * half_b - a * c;
     if (discriminant < 0)
@@ -40,10 +44,11 @@ bool Sphere::hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const
         if (root < tMin || tMax < root)
             return false;
     }
-    rec.t = root;
-    rec.p = r.at(rec.t);
-    Vec3 outwardNormal = (rec.p - center) / radius;
-    rec.setFaceNormal(r, outwardNormal);
+    record.t = root;
+    record.hitPoint = ray.at(record.t);
+    Vec3 outwardNormal = (record.hitPoint - m_center) / m_radius;
+    record.setFaceNormal(ray, outwardNormal);
+    record.pMaterial = m_pMaterial;
 
     return true;
 }

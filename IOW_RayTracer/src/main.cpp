@@ -6,9 +6,9 @@
 #include "Sphere.h"
 #include "common.h"
 
-Color rayColor(const Ray &r, const Hittable &world, int depth)
+Color rayColor(const Ray &ray, const Hittable &world, int depth)
 {
-    HitRecord rec;
+    HitRecord record;
 
     // If ray bounce limit is exceeded, no more light is gathered
     if (depth <= 0)
@@ -16,12 +16,13 @@ Color rayColor(const Ray &r, const Hittable &world, int depth)
         return Color(0, 0, 0);
     }
 
-    if (world.hit(r, 0.001, infinity, rec))
+    if (world.hit(ray, 0.001, infinity, record))
     {
-        Point3 target = rec.p + rec.normal + randomUnitVector();
-        return 0.5 * rayColor(Ray(rec.p, target - rec.p), world, depth - 1);
+        Point3 target = record.hitPoint + record.normal + randomUnitVector();
+        return 0.5 * rayColor(Ray(record.hitPoint, target - record.hitPoint),
+                              world, depth - 1);
     }
-    Vec3 unitDirection = unitVector(r.direction());
+    Vec3 unitDirection = unitVector(ray.direction());
     auto t = 0.5 * (unitDirection.y() + 1.0);
 
     return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
@@ -63,8 +64,8 @@ int main()
                 auto u = (j + randomDouble()) / (imageWidth - 1);
                 auto v = (i + randomDouble()) / (imageHeight - 1);
 
-                Ray r = camera.getRay(u, v);
-                pixelColor += rayColor(r, world, maxDepth);
+                Ray ray = camera.getRay(u, v);
+                pixelColor += rayColor(ray, world, maxDepth);
             }
             writeColor(std::cout, pixelColor, samplesPerPixel);
         }
