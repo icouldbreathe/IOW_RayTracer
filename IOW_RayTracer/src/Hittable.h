@@ -1,17 +1,20 @@
 #pragma once
 
-#include "Ray.h"
+#include "common.h"
+
+class Material;
 
 struct HitRecord
 {
-    Point3 p;
+    Point3 hitPoint;
     Vec3 normal;
+    shared_ptr<Material> pMaterial;
     double t;
     bool bFrontFace;
 
-    inline void setFaceNormal(const Ray &r, const Vec3 &outwardNormal)
+    inline void setFaceNormal(const Ray &ray, const Vec3 &outwardNormal)
     {
-        bFrontFace = dot(r.direction(), outwardNormal) < 0;
+        bFrontFace = dot(ray.direction(), outwardNormal) < 0;
         normal = bFrontFace ? outwardNormal : -outwardNormal;
     }
 };
@@ -19,5 +22,6 @@ struct HitRecord
 class Hittable
 {
   public:
-    virtual bool hit(const Ray &r, double tMin, double tMax, HitRecord &rec) const = 0;
+    virtual bool hit(const Ray &ray, double tMin, double tMax,
+                     HitRecord &record) const = 0;
 };
