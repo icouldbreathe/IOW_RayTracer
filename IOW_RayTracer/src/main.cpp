@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "HittableList.h"
 #include "LambertianDiffuseMaterial.h"
+#include "MetalMaterial.h"
 #include "Sphere.h"
 #include "common.h"
 
@@ -49,11 +50,18 @@ int main()
     // World
     HittableList world;
 
-    auto materialDiffuse =
-        make_shared<LambertianDiffuseMaterial>(Color(0.5, 0.5, 0.5));
+    auto materialGround =
+        make_shared<LambertianDiffuseMaterial>(Color(0.8, 0.8, 0.0));
+    auto materialCenter =
+        make_shared<LambertianDiffuseMaterial>(Color(0.7, 0.3, 0.3));
+    auto materialLeft = make_shared<MetalMaterial>(Color(0.8, 0.8, 0.8));
+    auto materialRight = make_shared<MetalMaterial>(Color(0.8, 0.6, 0.2));
 
-    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, materialDiffuse));
-    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, materialDiffuse));
+    world.add(
+        make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, materialGround));
+    world.add(make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, materialCenter));
+    world.add(make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), 0.5, materialLeft));
+    world.add(make_shared<Sphere>(Point3(1.0, 0.0, -1.0), 0.5, materialRight));
 
     // Camera
 
