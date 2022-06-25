@@ -81,6 +81,13 @@ class Vec3
                     randomDouble(min, max));
     }
 
+    bool isNearZero() const
+    {
+        // Returns true if the vector is close to zero in all dimensions
+        const auto s = 1e-8;
+        return (fabs(e[0]) < s) && (fabs(e[1]) < s) && (fabs(e[2]) < s);
+    }
+
   public:
     double e[3];
 };
@@ -158,6 +165,11 @@ Vec3 randomInUnitSphere()
 Vec3 randomUnitVector()
 {
     return unitVector(randomInUnitSphere());
+}
+
+Vec3 reflect(const Vec3 &v, const Vec3 &n)
+{
+    return v - 2 * dot(v, n) * n;
 }
 
 // Type aliases for Vec3
