@@ -13,6 +13,13 @@ class LambertianDiffuseMaterial : public Material
                          Color &attenuation, Ray &scatteredRay) const override
     {
         auto scatterDirection = record.normal + randomUnitVector();
+
+        // Catch cases where Normal and RandomUnitVector cancel out
+        if (scatterDirection.isNearZero())
+        {
+            scatterDirection = record.normal;
+        }
+
         scatteredRay = Ray(record.hitPoint, scatterDirection);
         attenuation = m_albedo;
         return true;
