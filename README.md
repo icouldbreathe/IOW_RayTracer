@@ -14,7 +14,7 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [x] Surface normals and multiple objects
 - [x] Antialiasing
 - [x] Diffuse materials
-- [ ] Metal
+- [x] Metal
 - [ ] Dialectrics
 - [ ] Positionable Camera
 - [ ] Defocus Blur
