@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Hittable.h"
 #include "common.h"
 
 struct HitRecord;

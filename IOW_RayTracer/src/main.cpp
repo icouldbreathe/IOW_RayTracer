@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Color.h"
 #include "HittableList.h"
+#include "LambertianDiffuseMaterial.h"
 #include "Sphere.h"
 #include "common.h"
 
@@ -18,9 +19,16 @@ Color rayColor(const Ray &ray, const Hittable &world, int depth)
 
     if (world.hit(ray, 0.001, infinity, record))
     {
-        Point3 target = record.hitPoint + record.normal + randomUnitVector();
-        return 0.5 * rayColor(Ray(record.hitPoint, target - record.hitPoint),
-                              world, depth - 1);
+        Ray scattered;
+        Color attenuation;
+        if (record.pMaterial->scatter(ray, record, attenuation, scattered))
+        {
+            return attenuation * rayColor(scattered, world, depth - 1);
+        }
+        else
+        {
+            return Color(0, 0, 0);
+        }
     }
     Vec3 unitDirection = unitVector(ray.direction());
     auto t = 0.5 * (unitDirection.y() + 1.0);
@@ -40,8 +48,12 @@ int main()
 
     // World
     HittableList world;
-    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
-    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+
+    auto materialDiffuse =
+        make_shared<LambertianDiffuseMaterial>(Color(0.5, 0.5, 0.5));
+
+    world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, materialDiffuse));
+    world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, materialDiffuse));
 
     // Camera
 
