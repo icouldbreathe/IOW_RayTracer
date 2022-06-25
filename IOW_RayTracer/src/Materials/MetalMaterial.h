@@ -5,7 +5,8 @@
 class MetalMaterial : public Material
 {
   public:
-    MetalMaterial(const Color &color) : m_albedo(color)
+    MetalMaterial(const Color &color, double roughness)
+        : m_albedo(color), m_roughness(roughness < 1 ? roughness : 1)
     {
     }
 
@@ -14,11 +15,13 @@ class MetalMaterial : public Material
     {
         Vec3 reflected =
             reflect(unitVector(incomingRay.direction()), record.normal);
-        scatteredRay = Ray(record.hitPoint, reflected);
+        scatteredRay = Ray(record.hitPoint,
+                           reflected + m_roughness * randomInUnitSphere());
         attenuation = m_albedo;
         return (dot(scatteredRay.direction(), record.normal) > 0);
     }
 
   public:
     Color m_albedo;
+    double m_roughness;
 };
