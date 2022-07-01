@@ -5,24 +5,35 @@
 class Camera
 {
   public:
-    Camera()
+    Camera(Point3 lookFrom, Point3 lookAt, Vec3 vUp,
+           double vfov, // Vertical field of view in degrees
+           double aspectRatio, double aperture, double focusDistance)
     {
-        auto aspectRatio = 16.0 / 9.0;
-        auto viewportHeight = 2.0;
+        auto theta = degreesToRadians(vfov);
+        auto h = tan(theta / 2);
+        auto viewportHeight = 2.0 * h;
         auto viewportWidth = aspectRatio * viewportHeight;
-        auto focalLength = 1.0;
 
-        m_origin = Point3(0, 0, 0);
-        m_horizontal = Vec3(viewportWidth, 0.0, 0.0);
-        m_vertical = Vec3(0.0, viewportHeight, 0.0);
-        m_lowerLeftCorner = m_origin - m_horizontal / 2 - m_vertical / 2 -
-                            Vec3(0, 0, focalLength);
+        m_w = unitVector(lookFrom - lookAt);
+        m_u = unitVector(cross(vUp, m_w));
+        m_v = cross(m_w, m_u);
+
+        m_origin = lookFrom;
+        m_horizontal = focusDistance * viewportWidth * m_u;
+        m_vertical = focusDistance * viewportHeight * m_v;
+        m_lowerLeftCorner =
+            m_origin - m_horizontal / 2 - m_vertical / 2 - focusDistance * m_w;
+
+        m_lensRadius = aperture / 2;
     }
 
-    Ray getRay(double u, double v) const
+    Ray getRay(double s, double t) const
     {
-        return Ray(m_origin, m_lowerLeftCorner + u * m_horizontal +
-                                 v * m_vertical - m_origin);
+        Vec3 rd = m_lensRadius * randomInUnitDisk();
+        Vec3 offset = m_u * rd.x() + m_v * rd.y();
+
+        return Ray(m_origin + offset, m_lowerLeftCorner + s * m_horizontal +
+                                          t * m_vertical - m_origin - offset);
     }
 
   private:
@@ -30,4 +41,6 @@ class Camera
     Point3 m_lowerLeftCorner;
     Vec3 m_horizontal;
     Vec3 m_vertical;
+    Vec3 m_u, m_v, m_w;
+    double m_lensRadius;
 };
