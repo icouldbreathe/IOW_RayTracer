@@ -24,6 +24,11 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [x] Defocus Blur
 - [x] Final Render
 
+### Next:
+
+- [ ] Ray Tracing the Next Week
+- [ ] Ray Tracing the Rest of Your Life
+
 ## Prerequisites
 
 - [make](https://www.gnu.org/software/make/)
