@@ -2,6 +2,10 @@
 
 An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html).
 
+## Final Render
+
+<img width="600" alt="RTIOW Final Render" src="https://user-images.githubusercontent.com/9082440/176953805-aafc2261-1694-4cec-9c25-d788047cf1e6.png">
+
 ## Progress
 
 - [x] Output an image (PPM)
