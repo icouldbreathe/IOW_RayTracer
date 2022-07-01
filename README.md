@@ -16,9 +16,9 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [x] Diffuse materials
 - [x] Metal
 - [x] Dielectrics
-- [ ] Positionable Camera
-- [ ] Defocus Blur
-- [ ] Final Render
+- [x] Positionable Camera
+- [x] Defocus Blur
+- [x] Final Render
 
 ## Prerequisites
 
