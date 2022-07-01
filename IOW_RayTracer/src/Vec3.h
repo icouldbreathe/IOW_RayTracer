@@ -180,6 +180,22 @@ Vec3 refract(const Vec3 &uv, const Vec3 &n, double etaiOverEtat)
     return rOutPerp + rOutParallel;
 }
 
+Vec3 randomInUnitDisk()
+{
+    while (true)
+    {
+        auto p = Vec3(randomDouble(-1, 1), randomDouble(-1, 1), 0);
+        if (p.lengthSquared() >= 1)
+        {
+            continue;
+        }
+        else
+        {
+            return p;
+        }
+    }
+}
+
 // Type aliases for Vec3
 using Point3 = Vec3; // 3D point
 using Color = Vec3;  // RGB color
