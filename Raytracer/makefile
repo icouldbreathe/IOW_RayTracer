@@ -9,6 +9,11 @@ SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
+# Compiler flags
+CXX := clang++
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++20
+CPPWARN := -Wall -Werror -Wextra 
+
 # Debug build config
 DB_DIR := debug
 DB_BUILD_DIR := $(DB_DIR)/$(BUILD_DIR)
@@ -16,7 +21,7 @@ DB_BIN_DIR := $(DB_DIR)/$(BIN_DIR)
 DB_EXE := $(DB_BIN_DIR)/$(EXE)_debug.out
 DB_OBJS := $(SRCS:%=$(DB_BUILD_DIR)/%.o)
 DB_DEPS := $(DB_OBJS:.o=.d)
-DB_CPP_FLAGS := -g -O0 -DDEBUG
+DB_CPP_FLAGS := -g -O0 -DDEBUG $(CPPWARN)
 
 # Release build config
 REL_DIR := release
@@ -28,11 +33,6 @@ REL_OBJS := $(SRCS:%=$(REL_BUILD_DIR)/%.o)
 REL_DEPS := $(REL_OBJS:.o=.d)
 REL_CPP_FLAGS := -O3 -DNDEBUG
 
-# Compiler flags
-CXX := clang++
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++11
-CPPWARN := -Wall -Werror -Wextra 
-
 # Default build
 all: render
 
@@ -41,11 +41,11 @@ debug: $(DB_EXE)
 
 $(DB_EXE): $(DB_OBJS)
 	@$(MKDIR_P) $(dir $@)
-	@$(CXX) $(CPPFLAGS) $(CPPWARN) $(DB_CPP_FLAGS) $(DB_OBJS) -o $@ $(LDFLAGS)
-	@echo "Debug: Finished"
+	@$(CXX) $(CPPFLAGS) $(DB_CPP_FLAGS) $(DB_OBJS) -o $@ $(LDFLAGS)
+	@echo "$(BI_PURPLE)DEBUG:$(NO_COL) Finished."
 
 $(DB_BUILD_DIR)/%.cpp.o: %.cpp
-	@echo "Debug: Building.."
+	@echo "$(BI_PURPLE)DEBUG:$(NO_COL) Building: $<"
 	@$(MKDIR_P) $(dir $@)
 	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(DB_CPP_FLAGS) -c $< -o $@
 
@@ -55,10 +55,10 @@ release: $(REL_EXE)
 $(REL_EXE): $(REL_OBJS)
 	@$(MKDIR_P) $(dir $@)
 	@$(CXX) $(CPPFLAGS) $(REL_CPP_FLAGS) $(REL_OBJS) -o $@ $(LDFLAGS)
-	@echo "Release: Finished."
+	@echo "$(BI_BLUE)RELEASE:$(NO_COL) Finished."
 
 $(REL_BUILD_DIR)/%.cpp.o: %.cpp
-	@echo "Release: Building.."
+	@echo "$(BI_BLUE)RELEASE:$(NO_COL) Building: $<"
 	@$(MKDIR_P) $(dir $@)
 	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(REL_CPP_FLAGS) -c $< -o $@
 
@@ -66,7 +66,7 @@ $(REL_BUILD_DIR)/%.cpp.o: %.cpp
 render: $(REL_IMG_OUTPUT)
 
 $(REL_IMG_OUTPUT): $(REL_EXE)
-	@echo "Release: Executing.."
+	@echo "$(BI_BLUE)RELEASE:$(NO_COL) Executing: $<"
 	@$(MKDIR_P) $(dir $@)
 	@$< > $@
 	@open $@
@@ -85,3 +85,7 @@ clean:
 
 -include $(DEPS)
 MKDIR_P ?= mkdir -p
+
+NO_COL := \033[0m
+BI_BLUE := \033[1;94m
+BI_PURPLE := \033[1;95m
