@@ -146,7 +146,7 @@ inline Vec3 unitVector(Vec3 v)
     return v / v.length();
 }
 
-Vec3 randomInUnitSphere()
+inline Vec3 randomInUnitSphere()
 {
     while (true)
     {
@@ -162,25 +162,25 @@ Vec3 randomInUnitSphere()
     }
 }
 
-Vec3 randomUnitVector()
+inline Vec3 randomUnitVector()
 {
     return unitVector(randomInUnitSphere());
 }
 
-Vec3 reflect(const Vec3 &v, const Vec3 &n)
+inline Vec3 reflect(const Vec3 &v, const Vec3 &n)
 {
     return v - 2 * dot(v, n) * n;
 }
 
-Vec3 refract(const Vec3 &uv, const Vec3 &n, double etaiOverEtat)
+inline Vec3 refract(const Vec3 &uv, const Vec3 &n, double etaiOverEtat)
 {
-    auto cosTheta = fmin(dot(-uv, n), 1.0);
-    Vec3 rOutPerp = etaiOverEtat * (uv + cosTheta * n);
+    auto cosTheta     = fmin(dot(-uv, n), 1.0);
+    Vec3 rOutPerp     = etaiOverEtat * (uv + cosTheta * n);
     Vec3 rOutParallel = -sqrt(fabs(1.0 - rOutPerp.lengthSquared())) * n;
     return rOutPerp + rOutParallel;
 }
 
-Vec3 randomInUnitDisk()
+inline Vec3 randomInUnitDisk()
 {
     while (true)
     {
@@ -198,4 +198,4 @@ Vec3 randomInUnitDisk()
 
 // Type aliases for Vec3
 using Point3 = Vec3; // 3D point
-using Color = Vec3;  // RGB color
+using Color  = Vec3; // RGB color
