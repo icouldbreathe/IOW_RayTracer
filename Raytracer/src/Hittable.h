@@ -15,7 +15,7 @@ struct HitRecord
     inline void setFaceNormal(const Ray &ray, const Vec3 &outwardNormal)
     {
         bFrontFace = dot(ray.direction(), outwardNormal) < 0;
-        normal = bFrontFace ? outwardNormal : -outwardNormal;
+        normal     = bFrontFace ? outwardNormal : -outwardNormal;
     }
 };
 
@@ -24,4 +24,6 @@ class Hittable
   public:
     virtual bool hit(const Ray &ray, double tMin, double tMax,
                      HitRecord &record) const = 0;
+
+    virtual ~Hittable() = default;
 };
