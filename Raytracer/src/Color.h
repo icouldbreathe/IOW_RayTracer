@@ -13,6 +13,7 @@ void writeColor(std::ostream &out, Color pixelColor, int samplesPerPixel)
     // Divide color by the number of samples
     // Gamma-correct for gamma=2.0
     auto scale = 1.0 / samplesPerPixel;
+
     r = sqrt(scale * r);
     g = sqrt(scale * g);
     b = sqrt(scale * b);

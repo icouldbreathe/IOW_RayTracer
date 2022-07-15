@@ -41,8 +41,8 @@ HittableList testScene()
                 else if (choose_mat < 0.95)
                 {
                     // MetalMaterial
-                    auto albedo = Color::random(0.5, 1);
-                    auto fuzz = randomDouble(0, 0.5);
+                    auto albedo     = Color::random(0.5, 1);
+                    auto fuzz       = randomDouble(0, 0.5);
                     sphere_material = make_shared<MetalMaterial>(albedo, fuzz);
                     world.add(
                         make_shared<Sphere>(center, 0.2, sphere_material));
@@ -76,12 +76,12 @@ Color rayColor(const Ray &ray, const Hittable &world, int depth);
 int main()
 {
     // Image
-    const auto aspectRatio = 3.0 / 2.0;
-    const int imageWidth = 400;
-    const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
+    const auto aspectRatio    = 3.0 / 2.0;
+    const int imageWidth      = 50;
+    const int imageHeight     = static_cast<int>(imageWidth / aspectRatio);
     const int samplesPerPixel = 100;
-    const int maxColor = 255;
-    const int maxDepth = 50;
+    const int maxColor        = 255;
+    const int maxDepth        = 50;
 
     // World
 
@@ -92,9 +92,10 @@ int main()
     Point3 lookFrom(13, 2, 3);
     Point3 lookAt(0, 0, 0);
     Vec3 vUp(0, 1, 0);
+
     auto distanceToFocus = 10.0;
-    auto aperture = 0.1;
-    auto vfov = 20;
+    auto aperture        = 0.1;
+    auto vfov            = 20;
 
     Camera camera(lookFrom, lookAt, vUp, vfov, aspectRatio, aperture,
                   distanceToFocus);
@@ -150,7 +151,7 @@ Color rayColor(const Ray &ray, const Hittable &world, int depth)
         }
     }
     Vec3 unitDirection = unitVector(ray.direction());
-    auto t = 0.5 * (unitDirection.y() + 1.0);
+    auto t             = 0.5 * (unitDirection.y() + 1.0);
 
     return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
