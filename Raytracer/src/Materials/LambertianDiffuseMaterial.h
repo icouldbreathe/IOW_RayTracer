@@ -5,25 +5,11 @@
 class LambertianDiffuseMaterial : public Material
 {
   public:
-    LambertianDiffuseMaterial(const Color &color) : m_albedo(color)
-    {
-    }
+    LambertianDiffuseMaterial(const Color &color);
 
-    virtual bool scatter(const Ray &incomingRay, const HitRecord &record,
-                         Color &attenuation, Ray &scatteredRay) const override
-    {
-        auto scatterDirection = record.normal + randomUnitVector();
-
-        // Catch cases where Normal and RandomUnitVector cancel out
-        if (scatterDirection.isNearZero())
-        {
-            scatterDirection = record.normal;
-        }
-
-        scatteredRay = Ray(record.hitPoint, scatterDirection);
-        attenuation = m_albedo;
-        return true;
-    }
+    virtual bool scatter([[maybe_unused]] const Ray &incidentRay,
+                         const HitRecord &record, Color &attenuation,
+                         Ray &scatteredRay) const override;
 
   public:
     Color m_albedo;
