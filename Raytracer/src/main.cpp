@@ -2,10 +2,10 @@
 
 #include "Camera.h"
 #include "Color.h"
+#include "DielectricMaterial.h"
 #include "HittableList.h"
-#include "Materials/DielectricMaterial.h"
-#include "Materials/LambertianDiffuseMaterial.h"
-#include "Materials/MetalMaterial.h"
+#include "LambertianDiffuseMaterial.h"
+#include "MetalMaterial.h"
 #include "Sphere.h"
 #include "common.h"
 
@@ -77,9 +77,9 @@ int main()
 {
     // Image
     const auto aspectRatio    = 3.0 / 2.0;
-    const int imageWidth      = 50;
+    const int imageWidth      = 200;
     const int imageHeight     = static_cast<int>(imageWidth / aspectRatio);
-    const int samplesPerPixel = 100;
+    const int samplesPerPixel = 32;
     const int maxColor        = 255;
     const int maxDepth        = 50;
 
@@ -95,7 +95,7 @@ int main()
 
     auto distanceToFocus = 10.0;
     auto aperture        = 0.1;
-    auto vfov            = 20;
+    auto vfov            = 60;
 
     Camera camera(lookFrom, lookAt, vUp, vfov, aspectRatio, aperture,
                   distanceToFocus);
