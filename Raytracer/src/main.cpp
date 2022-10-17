@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 
 #include "Camera.h"
@@ -102,6 +103,8 @@ int main()
 
     // Render
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     std::cout << "P3\n"
               << imageWidth << ' ' << imageHeight << "\n"
               << maxColor << "\n";
@@ -124,7 +127,13 @@ int main()
         }
     }
 
+    auto stop = std::chrono::high_resolution_clock::now();
+
+    auto duration =
+        std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+
     std::cerr << "\nDone.\n";
+    std::cerr << "Duration: " << duration.count() << " seconds\n";
 }
 
 Color rayColor(const Ray &ray, const Hittable &world, int depth)
