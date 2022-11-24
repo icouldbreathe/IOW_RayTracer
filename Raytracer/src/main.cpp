@@ -1,5 +1,10 @@
 #include <chrono>
 #include <iostream>
+#include <mutex>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <vector>
 
 #include "Camera.h"
 #include "Color.h"
@@ -9,6 +14,8 @@
 #include "MetalMaterial.h"
 #include "Sphere.h"
 #include "common.h"
+
+std::mutex mutexScanlines;
 
 HittableList testScene()
 {
@@ -74,44 +81,18 @@ HittableList testScene()
 
 Color rayColor(const Ray &ray, const Hittable &world, int depth);
 
-int main()
+void render(int startPos, int endPos, int imageHeight, int imageWidth,
+            int samplesPerPixel, int maxDepth, HittableList &world,
+            Camera &camera, std::stringstream &buffer, int &scanlines)
 {
-    // Image
-    const auto aspectRatio    = 3.0 / 2.0;
-    const int imageWidth      = 200;
-    const int imageHeight     = static_cast<int>(imageWidth / aspectRatio);
-    const int samplesPerPixel = 32;
-    const int maxColor        = 255;
-    const int maxDepth        = 50;
-
-    // World
-
-    auto world = testScene();
-
-    // Camera
-
-    Point3 lookFrom(13, 2, 3);
-    Point3 lookAt(0, 0, 0);
-    Vec3 vUp(0, 1, 0);
-
-    auto distanceToFocus = 10.0;
-    auto aperture        = 0.1;
-    auto vfov            = 60;
-
-    Camera camera(lookFrom, lookAt, vUp, vfov, aspectRatio, aperture,
-                  distanceToFocus);
-
-    // Render
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    std::cout << "P3\n"
-              << imageWidth << ' ' << imageHeight << "\n"
-              << maxColor << "\n";
-
-    for (int i = imageHeight - 1; i >= 0; --i)
+    for (int i = endPos - 1; i >= startPos; --i)
     {
-        std::cerr << "\rScanlines remaining: " << i << ' ' << std::flush;
+        mutexScanlines.lock();
+        std::cerr << "\rScanlines remaining: " << imageHeight - scanlines - 1
+                  << ' ' << std::flush;
+        ++scanlines;
+        mutexScanlines.unlock();
+
         for (int j = 0; j < imageWidth; ++j)
         {
             Color pixelColor(0, 0, 0);
@@ -123,8 +104,91 @@ int main()
                 Ray ray = camera.getRay(u, v);
                 pixelColor += rayColor(ray, world, maxDepth);
             }
-            writeColor(std::cout, pixelColor, samplesPerPixel);
+
+            writeColor(buffer, pixelColor, samplesPerPixel);
         }
+    }
+}
+
+int main()
+{
+    // Image
+    const auto aspectRatio    = 3.0 / 2.0;
+    const int imageWidth      = 200;
+    const int imageHeight     = static_cast<int>(imageWidth / aspectRatio);
+    const int samplesPerPixel = 32;
+    const int maxColor        = 255;
+    const int maxDepth        = 50;
+
+    // World
+    auto world = testScene();
+
+    // Camera
+    Point3 lookFrom(13, 2, 3);
+    Point3 lookAt(0, 0, 0);
+    Vec3 vUp(0, 1, 0);
+    auto distanceToFocus = 10.0;
+    auto aperture        = 0.1;
+    auto vfov            = 60;
+
+    Camera camera(lookFrom, lookAt, vUp, vfov, aspectRatio, aperture,
+                  distanceToFocus);
+
+    // Threads
+    int nThreads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads(nThreads);
+    std::stringstream buffer[nThreads];
+    int scanlines{0};
+    int nTasks    = 0;
+    int remainder = 0;
+
+    if (imageHeight <= nThreads)
+    {
+        nThreads = 1;
+        nTasks   = imageHeight;
+    }
+    else
+    {
+        nTasks    = imageHeight / nThreads;
+        remainder = imageHeight % nThreads;
+    }
+
+    std::cerr << "Threads: " << nThreads << "\n";
+
+    // Render
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // PPM preamble
+    std::cout << "P3\n"
+              << imageWidth << ' ' << imageHeight << "\n"
+              << maxColor << "\n";
+
+    // split work per thread
+    for (int i = 0, startPos = 0, endPos = 0; i < nThreads; ++i)
+    {
+        if (remainder)
+        {
+            endPos = startPos + nTasks + 1;
+            --remainder;
+        }
+        else
+        {
+            endPos = startPos + nTasks;
+        }
+
+        threads[i] = std::thread(render, startPos, endPos, imageHeight,
+                                 imageWidth, samplesPerPixel, maxDepth,
+                                 std::ref(world), std::ref(camera),
+                                 std::ref(buffer[i]), std::ref(scanlines));
+
+        startPos = endPos;
+    }
+
+    // join threads and print output
+    for (int i = nThreads - 1; i >= 0; --i)
+    {
+        threads[i].join();
+        std::cout << buffer[i].str();
     }
 
     auto stop = std::chrono::high_resolution_clock::now();
