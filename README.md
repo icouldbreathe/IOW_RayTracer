@@ -23,6 +23,7 @@ An attempt at making a ray tracer. Based on [Ray Tracing in One Weekend](https:/
 - [x] Positionable Camera
 - [x] Defocus Blur
 - [x] Final Render
+- [x] Multithreading
 
 ### Next:
 
